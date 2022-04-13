@@ -1,0 +1,11 @@
+node_modules
+dist
+
+.env
+
+npm-debug.log*
+*.log
+
+.vscode/launch.json
+.vscode/settings.json
+.vscode/tasks.json
