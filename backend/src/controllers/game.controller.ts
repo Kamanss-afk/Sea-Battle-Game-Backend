@@ -176,7 +176,7 @@ export class GameController {
         destroyed,
       });
   
-      socket.broadcast.emit('get-shot', {
+      socket.broadcast.to(gameId).emit('get-shot', {
         coords,
         hit,
         destroyed,
