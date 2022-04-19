@@ -3,7 +3,7 @@ import { Service } from 'typedi';
 import { Game } from '../models/game.model';
 
 interface Games {
-  [key: string]: Game;
+  [key: string]: Game | null;
 }
 
 @Service()
@@ -18,5 +18,9 @@ export class gamesService {
 
   public findGame(gameId: string) {
     return this.games[gameId];
+  }
+
+  public destroyGame(gameId: string) {
+   this.games[gameId] = null;
   }
 } 
