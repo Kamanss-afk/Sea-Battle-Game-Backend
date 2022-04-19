@@ -30,7 +30,7 @@ export class Game {
   }
 
   public joinGame(name: string): Player {
-    if(this.players.length > 2) throw new Error('ERROR_NO_SEATS');
+    if(this.players.length >= 2) throw new Error('ERROR_NO_SEATS');
 
     const player = new Player(name);
     this.players.push(player);
