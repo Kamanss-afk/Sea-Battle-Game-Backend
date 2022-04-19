@@ -1,10 +1,11 @@
 import { Service } from 'typedi';
-import { Server, Socket } from 'socket.io';
+import { Server } from 'socket.io';
 import { ConnectedSocket, MessageBody, OnMessage, SocketController, SocketIO } from 'socket-controllers';
 
 import { gamesService } from '../services/games.service';
 import { GameState } from '../models/game.model';
 import { ShipCoords } from '../models/ship.model';
+import { ExtSocket } from '../types/socket.type';
 
 @Service()
 @SocketController()
@@ -13,7 +14,7 @@ export class GameController {
 
   @OnMessage('game-start')
   public async startGame(
-    @ConnectedSocket() socket: Socket,
+    @ConnectedSocket() socket: ExtSocket,
     @MessageBody() message: { name: string }
   ) {
     try {
@@ -45,7 +46,7 @@ export class GameController {
   @OnMessage('game-join')
   public async joinGame(
     @SocketIO() io: Server,
-    @ConnectedSocket() socket: Socket,
+    @ConnectedSocket() socket: ExtSocket,
     @MessageBody() message: { name: string, gameId: string }
   ) {
     try {
@@ -83,7 +84,7 @@ export class GameController {
   @OnMessage('deploy-ships')
   public async deployShips(
     @SocketIO() io: Server,
-    @ConnectedSocket() socket: Socket,
+    @ConnectedSocket() socket: ExtSocket,
     @MessageBody() message: { userId: string, gameId: string, ships: Array<Array<ShipCoords>> }
   ) {
     try {
@@ -149,7 +150,7 @@ export class GameController {
   @OnMessage('make-shot')
   public async makeShot(
     @SocketIO() io: Server,
-    @ConnectedSocket() socket: Socket,
+    @ConnectedSocket() socket: ExtSocket,
     @MessageBody() message: { userId: string, gameId: string, coords: ShipCoords }
   ) {
     try {
