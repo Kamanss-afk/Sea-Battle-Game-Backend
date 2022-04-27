@@ -21,6 +21,7 @@ export class gamesService {
   }
 
   public destroyGame(gameId: string) {
-   this.games[gameId] = null;
+    this.games[gameId]?.timer.stop();
+    this.games[gameId] = null;
   }
 } 
