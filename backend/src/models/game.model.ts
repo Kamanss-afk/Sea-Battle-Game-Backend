@@ -77,6 +77,10 @@ export class Game {
     let destroyed: boolean = false;
   
     if(shotedShip) {
+      if(shotedShip.shootedCells.find(shotedCell => JSON.stringify(shotedCell) === JSON.stringify(coords))) {
+        throw new Error('ERROR_ALREADY_SHOOTED');
+      }
+
       shotedShip.shootedCells.push(coords);
 
       if(shotedShip.shootedCells.length === shotedShip.coords.length) shotedShip.destroyed = true;
