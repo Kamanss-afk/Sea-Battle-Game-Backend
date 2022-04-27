@@ -28,6 +28,9 @@ export class GameController {
   
       await socket.join(game.id);
 
+      socket.gameId = game.id;
+      socket.userId = player.id;
+
       socket.emit('game-start_success', { 
         gameId: game.id, 
         player: {
@@ -56,9 +59,12 @@ export class GameController {
       if(!game) throw new Error('ERROR_GAME_NOT_FOUND');
 
       const player = game.joinGame(name);
-
       if(!player) throw new Error('ERROR_JOIN_PLAYER');
+
       await socket.join(gameId);
+
+      socket.gameId = game.id;
+      socket.userId = player.id;
 
       socket.emit('game-join_success', {
         gameId: game.id,
@@ -89,13 +95,16 @@ export class GameController {
   ) {
     try {
 
-      const { userId, gameId, ships } = message;
+      const { ships } = message;
+      const { userId, gameId } = socket;
       
       const game = this.gamesService.findGame(gameId);
       if(!game) throw new Error('ERROR_GAME_NOT_FOUND');
 
       const player = game.players.find(player => player.id === userId);
       if(!player) throw new Error('ERROR_USER_NOT_FOUND');
+
+      if(game.state === GameState.INIT) throw new Error('ERROR_GAME_STATE_INIT');
 
       const resutl = game.deployShips(userId, ships);
 
@@ -154,7 +163,8 @@ export class GameController {
     @MessageBody() message: { userId: string, gameId: string, coords: ShipCoords }
   ) {
     try {
-      const { userId, gameId, coords } = message;
+      const { coords } = message;
+      const { userId, gameId } = socket;
 
       const game = this.gamesService.findGame(gameId);
       if(!game) throw new Error('ERROR_GAME_NOT_FOUND');
@@ -188,10 +198,6 @@ export class GameController {
           winner: {
             id: game.winner?.id,
             name: game.winner?.name,
-          },
-          looser: {
-            id: game.looser?.id,
-            name: game.looser?.name,
           }
         });
       }
