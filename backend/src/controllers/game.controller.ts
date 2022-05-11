@@ -127,11 +127,7 @@ export class GameController {
 
         io.to(gameId).emit('game-state', { 
           state: game.state,
-        });
-
-        io.to(gameId).emit('change-turn', {
-          turn: game.players[game.turn].id,
-        });
+        })
 
         game.timer.start((duration, done) => {
           if(done) {
