@@ -6,6 +6,7 @@ import { Timer } from './timer.model';
 export enum GameState {
   INIT='INIT',
   DEPLOY='DEPLOY',
+  WAIT='WAIT',
   BATTLE='BATTLE',
   END='END',
 }
@@ -56,6 +57,8 @@ export class Game {
 
     if(this.players.filter(player => player.ready).length === 2) {
       this.state = GameState.BATTLE;
+    } else {
+      this.state = GameState.WAIT;
     }
 
     return true;

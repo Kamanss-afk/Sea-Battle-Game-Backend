@@ -123,6 +123,12 @@ export class GameController {
         ready: player.ready,
       });
 
+      if(game.state === GameState.WAIT) {
+        socket.emit('game-state', { 
+          state: game.state,
+        });
+      }
+
       if(game.state === GameState.BATTLE) {
 
         io.to(gameId).emit('game-state', { 
